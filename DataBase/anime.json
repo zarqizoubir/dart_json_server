@@ -1,0 +1,14 @@
+{
+    "animes": [
+        {
+            "name": "one piece",
+            "year": "1999",
+            "episodes": "1035"
+        },
+        {
+            "name": "naruto",
+            "year": "2004",
+            "episodes": "720"
+        }
+    ]
+}
