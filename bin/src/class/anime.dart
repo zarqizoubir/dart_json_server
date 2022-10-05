@@ -5,6 +5,7 @@ import 'package:jaguar/jaguar.dart';
 class Anime {
   static init(Jaguar app) async {
     getAllAnimes(app);
+    addAnime(app);
   }
 
   static getAllAnimes(Jaguar app) {
@@ -21,6 +22,26 @@ class Anime {
       }
 
       return jsonEncode(allAnimes);
+    });
+  }
+
+  static void addAnime(Jaguar app) {
+    app.postJson('/animes', (context) async {
+      final data = await context.bodyAsJson();
+      File file = File("DataBase/anime.json");
+      print(file.existsSync());
+      print(data);
+
+      Map<String, dynamic> anime = jsonDecode(file.readAsStringSync());
+      List animes = anime['animes'];
+
+      animes.add(data);
+      print(animes);
+
+      anime.addAll({"animes": animes});
+
+      file.writeAsStringSync(jsonEncode(anime));
+      return {"CODE": "200"};
     });
   }
 }
