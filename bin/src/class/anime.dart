@@ -4,13 +4,13 @@ import 'package:jaguar/jaguar.dart';
 
 class Anime {
   static init(Jaguar app) async {
+    print('animes api started');
     getAllAnimes(app);
     getAllAnimesById(app);
     addAnime(app);
   }
 
   static getAllAnimes(Jaguar app) {
-    print('animes api started');
     app.get('/animes', (context) async {
       File anime = File('DataBase/anime.json');
 
@@ -19,15 +19,14 @@ class Anime {
       Map<String, dynamic> allAnimes = {};
 
       for (var i = 0; i <= animes.length - 1; i++) {
-        allAnimes.addAll({"$i": animes[i]});
+        allAnimes.addAll({"${i + 1}": animes[i]});
       }
 
-      return jsonEncode(allAnimes);
+      return jsonEncode(animes);
     });
   }
 
   static getAllAnimesById(Jaguar app) {
-    print('animes api started');
     app.get('/animes/:id', (context) async {
       final int id = context.pathParams.getInt("id")!;
 
