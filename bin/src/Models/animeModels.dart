@@ -1,12 +1,12 @@
-class Anime {
+class AnimeModel {
   int? id;
   String? name;
   String? year;
   String? episodes;
 
-  Anime({this.id, this.name, this.year, this.episodes});
+  AnimeModel({this.id, this.name, this.year, this.episodes});
 
-  Anime.fromJson(Map<String, dynamic> json) {
+  AnimeModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     year = json['year'];

@@ -2,12 +2,16 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:jaguar/jaguar.dart';
 
+import '../Models/animeModels.dart';
+
 class Anime {
   static init(Jaguar app) async {
     print('animes api started');
     getAllAnimes(app);
     getAllAnimesById(app);
     addAnime(app);
+    putAnimes(app);
+    deleteAnime(app);
   }
 
   static getAllAnimes(Jaguar app) {
@@ -15,13 +19,6 @@ class Anime {
       File anime = File('DataBase/anime.json');
 
       List animes = jsonDecode(anime.readAsStringSync())["animes"];
-
-      Map<String, dynamic> allAnimes = {};
-
-      for (var i = 0; i <= animes.length - 1; i++) {
-        allAnimes.addAll({"${i + 1}": animes[i]});
-      }
-
       return jsonEncode(animes);
     });
   }
@@ -57,6 +54,70 @@ class Anime {
 
       file.writeAsStringSync(jsonEncode(anime));
       return {"CODE": "200"};
+    });
+  }
+
+  static void putAnimes(Jaguar app) {
+    app.put(
+      '/animes/:id',
+      (context) async {
+        final int id = context.pathParams.getInt("id")!;
+        final newAnime = await context.bodyAsJson();
+
+        File file = File("DataBase/anime.json");
+
+        Map<String, dynamic> Json = jsonDecode(file.readAsStringSync());
+        List animes = Json['animes'];
+
+        for (var i = 0; i < animes.length - 1; i++) {
+          Map<String, dynamic> anime = animes[i];
+          if (anime["id"] == id) {
+            AnimeModel anm = AnimeModel.fromJson(anime);
+            AnimeModel newAnm = AnimeModel.fromJson(newAnime);
+
+            anm.id = id;
+            anm.name = newAnm.name;
+            anm.year = newAnm.year;
+            anm.episodes = newAnm.episodes;
+            animes.removeAt(id - 1);
+            animes.insert(id - 1, anm.toJson());
+            print('added with Succes');
+            break;
+          }
+        }
+
+        Json.addAll({"animes": animes});
+
+        file.writeAsStringSync(jsonEncode(Json));
+
+        return {"Code": "200"};
+      },
+    );
+  }
+
+  static void deleteAnime(Jaguar app) {
+    app.delete("/animes/:id", (context) async {
+      final int id = context.pathParams.getInt("id")!;
+
+      File file = File("DataBase/anime.json");
+
+      Map<String, dynamic> Json = jsonDecode(file.readAsStringSync());
+      List animes = Json['animes'];
+
+      for (var i = 0; i < animes.length - 1; i++) {
+        Map<String, dynamic> anime = animes[i];
+        if (anime["id"] == id) {
+          animes.removeAt(id - 1);
+          print("removed with succes");
+          break;
+        }
+      }
+
+      Json.addAll({"animes": animes});
+
+      file.writeAsStringSync(jsonEncode(Json));
+
+      return {"Code": "200"};
     });
   }
 }

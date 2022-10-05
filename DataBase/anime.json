@@ -1,28 +1,10 @@
 {
     "animes": [
         {
-            "id": 1,
-            "name": "one piece",
-            "year": "1999",
-            "episodes": "1035"
-        },
-        {
             "id": 2,
             "name": "naruto",
             "year": "2004",
             "episodes": "720"
-        },
-        {
-            "id": 3,
-            "name": "Komi San",
-            "year": "2021",
-            "episodes": "25"
-        },
-        {
-            "id": 4,
-            "name": "full Metal Alchemist",
-            "year": "2009",
-            "episode": "64"
         }
     ]
 }
